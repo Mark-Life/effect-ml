@@ -4,18 +4,27 @@
   "type": "module",
   "scripts": {
     "start": "bun run src/main.ts",
+    "dev": "VIEWER_DEV=true bun run src/main.ts",
+    "viewer:fixture": "bun run src/web/fixtures/fixture-server.ts",
+    "fixture:graph": "bun run src/web/fixtures/gen-fixture-graph.ts",
+    "test": "bun test src",
     "typecheck": "tsc --noEmit",
     "prepare": "effect-tsgo patch --typescript --no-oxlint"
   },
   "dependencies": {
+    "@dagrejs/dagre": "^3.1.1",
     "@effect-torch/backend-apple-native": "link:@effect-torch/backend-apple-native",
     "@effect-torch/backend-cpu": "link:@effect-torch/backend-cpu",
     "@effect-torch/core": "link:@effect-torch/core",
-    "effect": "4.0.0-beta.101"
+    "@fontsource/anton": "^5.3.0",
+    "@fontsource/ibm-plex-mono": "^5.3.0",
+    "effect": "4.0.0-beta.101",
+    "uplot": "^1.6.32"
   },
   "devDependencies": {
     "@effect/tsgo": "0.51.1",
     "@types/bun": "latest",
+    "@webgpu/types": "^0.1.74",
     "typescript": "^7"
   }
 }
