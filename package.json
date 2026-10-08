@@ -1,0 +1,19 @@
+{
+  "name": "effect-ml",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "bun run src/main.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@effect-torch/backend-apple-native": "link:@effect-torch/backend-apple-native",
+    "@effect-torch/backend-cpu": "link:@effect-torch/backend-cpu",
+    "@effect-torch/core": "link:@effect-torch/core",
+    "effect": "4.0.0-beta.101"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "typescript": "^5.9.0"
+  }
+}
