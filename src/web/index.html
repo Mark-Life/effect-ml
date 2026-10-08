@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>effect-ml</title>
+    <link rel="stylesheet" href="./styles/tokens.css" />
+    <link rel="stylesheet" href="./styles/base.css" />
+    <link rel="stylesheet" href="./styles/graph.css" />
+    <link rel="stylesheet" href="./styles/panels.css" />
+  </head>
+  <body>
+    <canvas class="ambient-field" id="field" aria-hidden="true"></canvas>
+    <canvas class="ambient-grain" id="grain" aria-hidden="true"></canvas>
+
+    <div class="compact-bar" id="compact" aria-hidden="true">
+      <span class="compact-title">effect-ml</span>
+      <span class="spacer"></span>
+      <span class="run-state">
+        <span class="chip" data-chip="status" data-state="waiting">waiting</span>
+        <span class="chip plain" data-chip="step"></span>
+      </span>
+      <span class="chip" data-chip="connection" data-state="connecting">connecting</span>
+      <div class="progress"><i></i></div>
+    </div>
+
+    <header class="hero" id="hero">
+      <canvas class="burst" id="burst" aria-hidden="true"></canvas>
+      <h1 class="title" id="title">effect-ml</h1>
+      <div class="hero-text">
+        <div class="kicker" id="kicker-task"><span>waiting for run</span></div>
+        <div class="kicker" id="kicker-backend"></div>
+      </div>
+      <div class="hero-chips">
+        <span class="run-state">
+          <span class="chip" data-chip="status" data-state="waiting">waiting</span>
+          <span class="chip plain" data-chip="step"></span>
+        </span>
+        <span class="chip" data-chip="connection" data-state="connecting">connecting</span>
+        <button class="chip toggle" data-ambient title="Toggle ambient motion (a)">ambient on</button>
+      </div>
+      <div class="progress"><i></i><em data-progress-label></em></div>
+    </header>
+
+    <main>
+      <div class="graph-col">
+        <section class="panel graph-panel">
+          <div class="panel-head"><h2>graph</h2><i class="leader"></i><span class="meta" id="graph-meta"></span></div>
+          <div id="graph"></div>
+        </section>
+      </div>
+      <div class="side">
+        <section class="panel">
+          <div class="panel-head"><h2>training</h2><i class="leader"></i><span class="meta">step loss · eval</span></div>
+          <div id="chart"></div>
+        </section>
+        <section class="panel">
+          <div class="panel-head"><h2>compiled program</h2><i class="leader"></i><span class="meta">diagnostics</span></div>
+          <div id="diagnostics"></div>
+        </section>
+      </div>
+      <section class="panel wide">
+        <div class="panel-head">
+          <h2>heatmaps</h2><i class="leader"></i>
+          <button class="tag dots-toggle" data-dots><span data-v="pixels">pixels</span> / <span data-v="dots">dots</span></button>
+        </div>
+        <div id="heatmaps"></div>
+      </section>
+      <section class="panel wide">
+        <div class="panel-head">
+          <h2>histograms</h2><i class="leader"></i>
+          <button class="tag dots-toggle" data-dots><span data-v="pixels">bars</span> / <span data-v="dots">dots</span></button>
+        </div>
+        <div id="histograms"></div>
+      </section>
+    </main>
+    <script type="module" src="./app.ts"></script>
+  </body>
+</html>

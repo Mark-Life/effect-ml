@@ -1,0 +1,21 @@
+:root {
+  color-scheme: dark;
+  --bg: #0a0a0a;
+  --bg-raise: #0f0f0f;
+  --fg: #e6e3df;
+  --fg-dim: #a3a09c;
+  --muted: #858280;
+  --faint: #2e2c2a;
+  --hair: rgb(255 255 255 / 0.12);
+  --hair-2: rgb(255 255 255 / 0.06);
+  --accent: #e0503a;
+  --accent-dim: rgb(224 80 58 / 0.45);
+  --accent-wash: rgb(224 80 58 / 0.10);
+  --hot: #fff1e8;
+  --glow: 0 0 10px rgb(255 96 64 / 0.55), 0 0 2px rgb(255 160 130 / 0.9);
+  --font-display: "Anton", "Oswald", Impact, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --track: 0.22em;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --r: 2px;
+}

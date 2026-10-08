@@ -1,0 +1,103 @@
+/* the column spans the first grid row; on wide screens the panel sticks, below that it fills the row */
+.graph-col { min-width: 0; display: flex; flex-direction: column; }
+.graph-panel { display: flex; flex-direction: column; flex: 1; min-height: 520px; }
+@media (min-width: 1900px) {
+  .graph-panel { position: sticky; top: 44px; flex: none; height: max(520px, calc(100vh - 210px)); }
+}
+#graph { position: relative; display: flex; flex-direction: column; flex: 1; min-height: 0; }
+.glyph-defs { position: absolute; width: 0; height: 0; overflow: hidden; color: var(--accent); }
+.graph-toolbar { display: flex; gap: 6px; align-items: center; margin-bottom: 8px; }
+.tag.check { cursor: pointer; }
+/* step of the latest pulse wave; it flashes with each wave */
+.graph-step { margin-right: 8px; font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); opacity: 0.45; }
+.graph-step:empty { display: none; }
+.graph-step.beat { animation: step-beat 1.4s var(--ease-out); }
+@keyframes step-beat { from { opacity: 1; text-shadow: 0 0 8px rgb(255 96 64 / 0.6); } }
+.tag.check input { position: absolute; opacity: 0; pointer-events: none; }
+.tag.check .mark::before { content: "[ ]"; color: var(--muted); letter-spacing: 0; }
+.tag.check input:checked + .mark::before { content: "[x]"; color: var(--accent); }
+.graph-legend {
+  display: flex; flex-wrap: wrap; gap: 4px 12px; margin-bottom: 10px; color: var(--muted); font-size: 10.5px;
+}
+.graph-legend span { display: inline-flex; align-items: center; gap: 5px; }
+.graph-legend svg { color: var(--fg-dim); overflow: visible; }
+.graph-legend span:nth-child(10) svg { color: var(--fg); }
+.graph-legend .tap-key i { width: 12px; height: 2px; background: var(--accent); box-shadow: var(--glow); }
+
+.graph-canvas {
+  position: relative; flex: 1; overflow: hidden;
+  background: radial-gradient(circle, rgb(255 255 255 / 0.05) 1px, transparent 1.2px) 0 0 / 26px 26px;
+}
+.graph-canvas svg { position: absolute; inset: 5px; width: calc(100% - 10px); height: calc(100% - 10px); display: block; cursor: grab; user-select: none; }
+.graph-canvas svg:active { cursor: grabbing; }
+.graph-pulses { position: absolute; inset: 5px; width: calc(100% - 10px); height: calc(100% - 10px); pointer-events: none; }
+.graph-empty { padding: 24px; color: var(--muted); }
+.graph-scroll { position: absolute; top: 12px; bottom: 12px; right: 9px; width: 1px; background: var(--faint); pointer-events: none; }
+.graph-scroll i { position: absolute; left: -1px; width: 3px; background: var(--fg-dim); border-radius: 1px; }
+
+/* edges */
+.edges path { fill: none; stroke: var(--fg); stroke-width: 1; vector-effect: non-scaling-stroke; transition: stroke 0.2s; }
+.edges path.on-path { stroke: var(--accent-dim); stroke-opacity: 1; }
+.mult { fill: var(--muted); font-size: 9px; }
+
+/* nodes */
+.node { transition: opacity 0.2s var(--ease-out); }
+.node .outer { fill: var(--bg-raise); stroke: var(--hair); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.node .inner { fill: none; stroke: var(--hair-2); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.node:hover .inner { stroke: var(--fg-dim); }
+.node.root .outer { stroke-dasharray: 3 2; }
+.node.tapped .outer { stroke: var(--accent-dim); }
+.node.is-active .outer { stroke: var(--accent); fill: url(#wash); }
+.node text { fill: var(--fg); font-size: 10.5px; }
+.node text.detail { fill: var(--muted); font-size: 9.5px; }
+.node text.chips { fill: var(--fg-dim); font-size: 9.5px; }
+.node .glyph { color: var(--muted); }
+.node.fam-loss .glyph { color: var(--fg); }
+.node .tap rect { fill: var(--bg); stroke: var(--accent); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.node .tap text { fill: var(--accent); font-size: 9px; letter-spacing: 0.08em; }
+.node .tap-tick { display: none; stroke: var(--accent); stroke-width: 2; vector-effect: non-scaling-stroke; }
+.labels { pointer-events: none; }
+.label text {
+  display: none; fill: var(--fg); font-size: calc(10.5px / var(--s, 1)); paint-order: stroke;
+  stroke: var(--bg); stroke-width: calc(3px / var(--s, 1)); stroke-linejoin: round;
+}
+.label .pip-label { transform: translate(calc(7px / var(--s, 1)), calc(3.5px / var(--s, 1))); }
+.label.tapped text { fill: var(--fg-dim); }
+.label.is-hover text, .label.is-active text { fill: var(--fg); }
+.node .port { fill: var(--muted); }
+.node.on-path .port { fill: var(--accent); }
+.node .pip { display: none; fill: var(--muted); }
+.has-selection .node:not(.on-path), .has-selection .label:not(.is-active) { opacity: 0.35; }
+
+/* level of detail: full boxes, then screen-sized chips with the op label, then dots */
+.node .node-chip { display: none; }
+.node .node-chip rect { fill: var(--bg-raise); stroke: var(--hair); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.node .node-chip text {
+  fill: var(--fg-dim); font-size: calc(10px / var(--s, 1)); text-anchor: middle; dominant-baseline: central;
+}
+.node:hover .node-chip rect { stroke: var(--fg-dim); }
+.node.root .node-chip rect { stroke-dasharray: 3 2; }
+.node.tapped .node-chip rect { stroke: var(--accent-dim); }
+.node.is-active .node-chip rect { stroke: var(--accent); fill: url(#wash); }
+.node.fam-loss .node-chip text, .node.is-active .node-chip text { fill: var(--fg); }
+.node .node-chip .chip-tap { fill: var(--accent); }
+.lod-fit .node .body, .lod-fit .node .tap, .lod-fit .node .port, .lod-fit .mult { display: none; }
+.lod-fit .node .node-chip { display: inline; }
+.lod-far .node .body, .lod-far .node .tap, .lod-far .node .port, .lod-far .mult { display: none; }
+.lod-far :is(.landmark, .is-hover, .is-active) .pip-label { display: inline; }
+.lod-far .node .pip { display: inline; r: calc(2.5px / var(--s, 1)); }
+.lod-far .node.tapped .pip, .lod-far .node.is-active .pip { fill: var(--accent); filter: drop-shadow(0 0 3px var(--accent)); }
+.lod-far .node.fam-loss .pip { fill: var(--fg); }
+.lod-far .edges path { opacity: 0.6; }
+.lod-far .edges path.on-path { opacity: 1; }
+
+/* tooltip */
+.graph-tooltip {
+  position: absolute; z-index: 10; margin: 0; max-width: 340px; max-height: 320px; overflow: auto; pointer-events: none;
+  background: rgb(15 15 15 / 0.94); backdrop-filter: blur(4px); padding: 10px 12px; font-size: 10.5px;
+}
+.graph-tooltip dl { display: grid; grid-template-columns: auto 1fr; gap: 1px 12px; margin: 0; }
+.graph-tooltip dt { color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; font-size: 9.5px; }
+.graph-tooltip dd { margin: 0; color: var(--fg); word-break: break-all; }
+.tooltip-attrs { margin-top: 8px; padding-top: 6px; border-top: 1px dotted var(--faint); color: var(--fg-dim); word-break: break-all; }
+.tooltip-attrs span { display: block; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; font-size: 9.5px; }
